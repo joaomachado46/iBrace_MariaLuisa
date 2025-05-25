@@ -4,91 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Informações de Emergência</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      max-width: 400px;
-      margin: 0 auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    img {
-      max-width: 100%;
-      border-radius: 12px;
-    }
-
-    h2 {
-      margin-top: 15px;
-      font-size: 24px;
-      color: #333;
-    }
-
-    p {
-      margin: 8px 0;
-      color: #555;
-    }
-
-    .footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #999;
-    }
-
-    .alerta {
-      background-color: #fff3cd;
-      border: 1px solid #ffeeba;
-      color: #856404;
-      padding: 10px;
-      margin: 15px auto;
-      border-radius: 8px;
-      max-width: 400px;
-    }
-
-    .ocultar {
-      display: none;
-    }
-
-    .botao-chamada {
-      display: inline-block;
-      margin-left: 10px;
-      padding: 4px 10px;
-      background-color: #28a745;
-      color: white;
-      text-decoration: none;
-      font-size: 14px;
-      border-radius: 6px;
-      transition: background-color 0.3s ease;
-    }
-
-    .botao-chamada:hover {
-      background-color: #218838;
-    }
-
-    .botao-gps {
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    .botao-gps:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <link rel="stylesheet" href="css/estilo.css" />
 </head>
 <body>
 
@@ -98,7 +14,47 @@
   </div>
 
   <div class="container">
-    <img src="marialuisa.jpg" alt="Foto filha">
+    <img src="img/marialuisa.jpg" alt="Foto filha">
+    <h2>Maria Luisa Machado</h2>
+    <p><strong>Idade:</strong> 2 anos</p>
+    <p>
+      <strong>Contacto Pai:</strong> +351918574111
+      <a href="tel:+351918574111" class="botao-chamada">📞 Ligar</a>
+    </p>
+    <p>
+      <strong>Contacto Mãe:</strong> +351916966759
+      <a href="tel:+351916966759" class="botao-chamada">📞 Ligar</a>
+    </p>
+    <p><strong>Alergias:</strong> Nenhuma conhecida</p>
+    <p><strong>Grupo Sanguíneo:</strong> O+</p>
+  </div>
+
+  <div class="footer">
+    Em caso de emergência, por favor entre em contacto com os pais.
+    <br><br>
+    <img src="img/iBrace_color.png" alt="iBrace logo" style="max-width: 80px; opacity: 0.6;" />
+  </div>
+
+  <script src="js/localizacao.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Informações de Emergência</title>
+  <link rel="stylesheet" href="css/estilo.css" />
+</head>
+<body>
+
+  <div id="aviso-localizacao" class="alerta">
+    ⚠️ Esta página usa a sua localização para ajudar em caso de emergência.  
+    <br>Por favor, clique em “Permitir” se solicitado.
+  </div>
+
+  <div class="container">
+    <img src="img/marialuisa.jpg" alt="Foto filha">
     <h2>Maria Luisa Machado</h2>
     <p><strong>Idade:</strong> 3 anos</p>
     <p>
@@ -113,91 +69,12 @@
     <p><strong>Grupo Sanguíneo:</strong> O+</p>
   </div>
 
-   <div class="footer">
-  Em caso de emergência, por favor entre em contacto com os pais.
-  <br><br>
-  <img src="iBrace_color.png" alt="iBrace logo" style="max-width: 80px; opacity: 0.6;" />
-</div>
+  <div class="footer">
+    Em caso de emergência, por favor entre em contacto com os pais.
+    <br><br>
+    <img src="img/iBrace_color.png" alt="iBrace logo" style="max-width: 80px; opacity: 0.6;" />
+  </div>
 
-  <script>
-    function mostrarBotaoAtivarGPS() {
-      const aviso = document.getElementById('aviso-localizacao');
-      aviso.innerHTML = `
-        ❌ Não foi possível obter a localização.<br>
-        Por favor, ative o GPS ou aceite a permissão.
-        <br><br>
-        <button onclick="tentarNovamente()" class="botao-gps">🔄 Ativar GPS</button>
-      `;
-    }
-
-    function tentarNovamente() {
-      navigator.geolocation.getCurrentPosition(
-        function (pos) {
-          const aviso = document.getElementById('aviso-localizacao');
-          aviso.classList.add("ocultar");
-
-          const userid = '525019daefcb432ca5c9562518bf1bc6';
-
-          fetch('https://appnfcinformation-c8hah7bvgmeecvff.westeurope-01.azurewebsites.net/Localizacao', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': '*/*'
-            },
-            body: JSON.stringify({
-              userKey: userid,
-              latitude: pos.coords.latitude.toString(),
-              longitude: pos.coords.longitude.toString()
-            })
-          })
-          .then(res => res.json())
-          .then(data => console.log("✅ Enviado", data))
-          .catch(err => console.error("❌ Erro:", err));
-        },
-        function (err) {
-          mostrarBotaoAtivarGPS();
-        }
-      );
-    }
-
-    window.addEventListener('load', () => {
-      const aviso = document.getElementById('aviso-localizacao');
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function (pos) {
-            console.log("📍 Localização obtida:");
-            console.log("Latitude:", pos.coords.latitude);
-            console.log("Longitude:", pos.coords.longitude);
-            aviso.classList.add("ocultar");
-
-            const userid = '525019daefcb432ca5c9562518bf1bc6';
-
-            fetch('https://appnfcinformation-c8hah7bvgmeecvff.westeurope-01.azurewebsites.net/Localizacao', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': '*/*'
-              },
-              body: JSON.stringify({
-                userKey: userid,
-                latitude: pos.coords.latitude.toString(),
-                longitude: pos.coords.longitude.toString()
-              })
-            })
-            .then(res => res.json())
-            .then(data => console.log("✅ Enviado", data))
-            .catch(err => console.error("❌ Erro:", err));
-          },
-          function (err) {
-            mostrarBotaoAtivarGPS();
-          }
-        );
-      } else {
-        aviso.innerHTML = "⚠️ O seu navegador não suporta geolocalização.";
-      }
-    });
-  </script>
-
+  <script src="js/localizacao.js"></script>
 </body>
 </html>
